@@ -1,0 +1,19 @@
+const useFetchProducts = async (API_URL, setItems, setLoad) => {
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok)
+      throw new Error(
+        `## ERROOOR ## hubo un problema del tipo HTTP, ${response.status}`
+      );
+    const data = await response.json();
+    setItems(data);
+    setLoad(false);
+  } catch (err) {
+    console.error(
+      `## ERROOOR ## La pagina no pudo cargar los datos por -> ${err}`
+    );
+    setLoad(false);
+  }
+};
+
+export default useFetchProducts;

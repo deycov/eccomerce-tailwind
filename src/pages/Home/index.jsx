@@ -1,4 +1,7 @@
 import React from "react";
+
+import useFetchProducts from "../../hooks/useFetchApi";
+
 import Layout from "../../components/Layout";
 import Card from "../../components/Card";
 function Home() {
@@ -8,33 +11,14 @@ function Home() {
 
   React.useEffect(() => {
     setLoad(true);
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok)
-          throw new Error(
-            `## ERROOOR ## hubo un problema del tipo HTTP, ${response.status}`
-          );
-        const data = await response.json();
-        setItems(data);
-        setLoad(false);
-      } catch (err) {
-        console.error(
-          `## ERROOOR ## La pagina no pudo cargar los datos por -> ${err}`
-        );
-        setLoad(false);
-      }
-    };
-
-    fetchProducts();
-    console.log(items);
+    useFetchProducts(API_URL, setItems, setLoad);
   }, []);
 
   return (
     <Layout>
       Home
       {load && <p>cargando</p>}
-      <div className='mt-10 grid  grid-cols-3 '>
+      <div className='grid m-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12'>
         {items.map((item) => (
           <Card key={item.id} {...item} />
         ))}
