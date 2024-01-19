@@ -1,18 +1,10 @@
-import React from "react";
-
-import useFetchProducts from "../../hooks/useFetchApi";
+import React, { useContext } from "react";
+import { ShopiProvider, ShopiStorage } from "../../hooks/useContextShopi";
 
 import Layout from "../../components/Layout";
 import Card from "../../components/Card";
 function Home() {
-  const API_URL = "https://fakestoreapi.com/products?limit=8";
-  const [items, setItems] = React.useState([]);
-  const [load, setLoad] = React.useState(false);
-
-  React.useEffect(() => {
-    setLoad(true);
-    useFetchProducts(API_URL, setItems, setLoad);
-  }, []);
+  const { items, load, addToCart } = useContext(ShopiStorage);
 
   return (
     <Layout>

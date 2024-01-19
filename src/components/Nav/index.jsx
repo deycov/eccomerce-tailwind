@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { ShopiStorage } from "../../hooks/useContextShopi";
 
 function Nav() {
+  const { cartCount, shoppingCart } = useContext(ShopiStorage);
   const activeStyle = "underline underline-offset-4";
-
   return (
     <nav className='bg-white flex justify-between items-center fixed top-0 w-full z-10 py-5 px-8 text-sm font-ligth'>
       <ul className='flex items-center gap-3'>
@@ -75,7 +76,9 @@ function Nav() {
             Sign In
           </NavLink>
         </li>
-        <li className='font-semibold text-md'>🛒 0</li>
+        <li className='font-semibold text-md' onClick={shoppingCart}>
+          🛒 {cartCount}
+        </li>
       </ul>
     </nav>
   );
