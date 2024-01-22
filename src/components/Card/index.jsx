@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { ShopiStorage } from "../../hooks/useContextShopi";
 
 function Card({ id, title, price, image, category }) {
-  const { addToCart } = useContext(ShopiStorage);
+  const { addToCart, containerProductDetail } = useContext(ShopiStorage);
   const [selected, setSelected] = React.useState(false);
   return (
     <div
@@ -18,6 +18,9 @@ function Card({ id, title, price, image, category }) {
           className='w-full h-full object-contain rounded-lg'
           src={image}
           alt='photoBike'
+          onClick={ () =>
+            containerProductDetail(id)
+          }
         />
         <button
           className={`absolute flex justify-center items-center w-8 h-8 font-semibold text-xl rounded-full top-0 right-0 shadow-sm  ${

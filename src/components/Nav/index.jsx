@@ -76,7 +76,7 @@ function Nav() {
             Sign In
           </NavLink>
         </li>
-        <li className='font-semibold text-md' onClick={shoppingCart}>
+        <li className='font-semibold text-md hover:cursor-pointer' onClick={shoppingCart}>
           🛒 {cartCount}
         </li>
       </ul>
