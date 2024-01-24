@@ -6,7 +6,6 @@ function CartDetail() {
 
   return (
     <>  
-      
       <button className="absolute top-2 right-3 text-red-600 " onClick={() => setShowCart(false)}> X </button>
       <div className="flex flex-col justify-center py-1">
         <h3 className=" text-lg text-center">
@@ -22,11 +21,8 @@ function CartDetail() {
 
       {cartItems.map((product)=>(
         <div key={product.id} className="flex flex-row justify-between items-center p-4 hover:bg-slate-100">
-          
-            <img src={product.image} className="w-16 h-20"/>
-            
+            <img src={product.image} className="w-16 h-20"/>  
             <h3 className="px-7 text-center"> {product.title} </h3>
-          
             <p className="text-emerald-600"> {product.price} </p>
         </div>
       ))}

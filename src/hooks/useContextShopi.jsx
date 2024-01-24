@@ -1,10 +1,15 @@
 import React, { createContext } from "react";
-import useFetchProducts from "./useFetchApi";
+import {useFetchProducts, useFetchCategories, useFetchClothes} from "./useFetchApi";
 const ShopiStorage = createContext();
 
 function ShopiProvider({ children }) {
-  const API_URL = "https://fakestoreapi.com/products?limit=8";
-  
+  const API_URL = "https://fakestoreapi.com/products";
+  const API_LIMIT = "?limit=9";
+  const API_JEWELERY = "/category/jewelery"; 
+  const API_ELECTRONICS = "/category/electronics"; 
+  const API_WOMENS = "/category/women's clothing"; 
+  const API_MENS = "/category/men's clothing";
+   
   //Estado de carga
   const [load, setLoad] = React.useState(false);
   
@@ -24,16 +29,33 @@ function ShopiProvider({ children }) {
 
   React.useEffect(() => {
     setLoad(true);
-    useFetchProducts(API_URL, setItems, setLoad);
+    useFetchProducts(API_URL, API_LIMIT, setItems, setLoad);
   }, []);
 
-  const addToCart = (item, setItem, id, title, price, image) => {
-    if (!item) {
-      setItem(true);
+  //peticiones a la API
+  const getFornitures = async () => {
+    setLoad(true);
+    await useFetchCategories(setItems, API_URL, API_JEWELERY)
+    setLoad(false);
+  }
+  const getElectronics = async () => {
+    setLoad(true);
+    await useFetchCategories(setItems, API_URL, API_ELECTRONICS)
+    setLoad(false);
+  }
+  const getClothes = async () => {
+    setLoad(true);
+    await useFetchClothes(setItems, API_URL, API_WOMENS, API_MENS)
+    setLoad(false);
+  }
+
+  //funciones
+  const addToCart = ( id, title, price, image) => {
+    if(!cartItems.some(item => item.id === id)){
       const newProduct = { id, title, price, image };
-      setPay((state) => state+price)
-      setCartItems((product) => [...product, newProduct]);
-    } else console.log("Mensaje de error");
+      setPay(state => state + price);
+      setCartItems(product => [...product, newProduct]);
+    }
   };
 
   const shoppingCart = () => {
@@ -59,14 +81,14 @@ function ShopiProvider({ children }) {
     <ShopiStorage.Provider
       value={{
         //productos 
-        items, load,
+        items, setItems, load,
         //carrito
         cartCount, addToCart, shoppingCart, cartItems, setCartItems, pay, showCart, setShowCart,
         //detalles de producto
-        showProductDetail,
-        setShowProductDetail,
-        containerProductDetail,
-        product
+        showProductDetail, setShowProductDetail,
+        containerProductDetail, product,
+        //consultas a API
+        getElectronics, getClothes, getFornitures,
         }}
     >
       {children}

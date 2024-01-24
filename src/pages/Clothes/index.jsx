@@ -3,8 +3,12 @@ import { ShopiStorage } from "../../hooks/useContextShopi";
 
 import Layout from "../../components/Layout";
 import Card from "../../components/Card";
-function Home() {
-  const { items, load } = useContext(ShopiStorage);
+function Clothes() {
+  const { load, getClothes, items } = useContext(ShopiStorage);
+
+  React.useEffect(()=>{
+    getClothes();
+  },[])
 
   return (
     <Layout>
@@ -18,4 +22,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Clothes;

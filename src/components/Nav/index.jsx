@@ -18,7 +18,7 @@ function Nav() {
         </li>
         <li>
           <NavLink
-            to='/1'
+            to='/electronics'
             className={({ isActive }) => (isActive ? activeStyle : null)}
           >
             Electronics
@@ -26,7 +26,7 @@ function Nav() {
         </li>
         <li>
           <NavLink
-            to='/2'
+            to='/fornitures'
             className={({ isActive }) => (isActive ? activeStyle : null)}
           >
             Fornitures
@@ -34,10 +34,10 @@ function Nav() {
         </li>
         <li>
           <NavLink
-            to='/3'
+            to='/clothes'
             className={({ isActive }) => (isActive ? activeStyle : null)}
           >
-            Chlotes
+            Clothes
           </NavLink>
         </li>
       </ul>

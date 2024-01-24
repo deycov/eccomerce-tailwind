@@ -3,12 +3,13 @@ import { ShopiStorage } from "../../hooks/useContextShopi";
 
 function Card({ id, title, price, image, category }) {
   const { addToCart, containerProductDetail } = useContext(ShopiStorage);
-  const [selected, setSelected] = React.useState(false);
+
+  //${/* selected ? "border-lime-600" : ""*/}
+
   return (
     <div
-      className={`bg-transparent border-2 py-2 px-2 w-56 h-64 flex flex-col justify-center rounded-xl  ${
-        selected ? "border-lime-600" : "border-black"
-      } `}
+      className={`bg-transparent border-2 py-2 px-2 w-56 h-64 flex flex-col justify-center rounded-xl border-black 
+       `}
     >
       <figure className='relative rounded-md w-full cursor-pointer h-4/5'>
         <span className='absolute bg-emerald-100 rounded-lg bottom-0 text-center font-semibold text-sm px-4 mx-1 my-1 opacity-75'>
@@ -23,11 +24,9 @@ function Card({ id, title, price, image, category }) {
           }
         />
         <button
-          className={`absolute flex justify-center items-center w-8 h-8 font-semibold text-xl rounded-full top-0 right-0 shadow-sm  ${
-            selected ? "text-lime-400" : "hover:animate-rotate"
-          }`}
+          className={`absolute flex justify-center items-center w-8 h-8 font-semibold text-xl rounded-full top-0 right-0 shadow-sm hover:animate-rotate`}
           onClick={() => {
-            addToCart(selected, setSelected, id, title, price, image);
+            addToCart(id, title, price, image);
           }}
         >
           +
