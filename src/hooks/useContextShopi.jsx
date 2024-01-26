@@ -1,8 +1,11 @@
 import React, { createContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {useFetchProducts, useFetchCategories, useFetchClothes} from "./useFetchApi";
+
 const ShopiStorage = createContext();
 
 function ShopiProvider({ children }) {
+  const navigate = useNavigate();
   const API_URL = "https://fakestoreapi.com/products";
   const API_LIMIT = "?limit=9";
   const API_JEWELERY = "/category/jewelery"; 
@@ -21,18 +24,19 @@ function ShopiProvider({ children }) {
   const [showCart,setShowCart] = React.useState(false);
   const [pay,setPay] = React.useState(0)
   let cartCount = cartItems.length;
-
+  
+  // Estados de orden de pedido
+  const [order,setOrder] = React.useState(false);
+  
   //Estados de product detail
   const [showProductDetail,setShowProductDetail] = React.useState(false);
   const [product, setProduct] = React.useState({});
-
-
-  React.useEffect(() => {
-    setLoad(true);
-    useFetchProducts(API_URL, API_LIMIT, setItems, setLoad);
-  }, []);
-
+  
   //peticiones a la API
+  const getProducts = async () => {
+    setLoad(true);
+    useFetchProducts(API_URL, setItems, setLoad);
+  };
   const getFornitures = async () => {
     setLoad(true);
     await useFetchCategories(setItems, API_URL, API_JEWELERY)
@@ -63,7 +67,7 @@ function ShopiProvider({ children }) {
     setShowCart(true);
   };
 
-  const containerProductDetail = async (id) => {
+  const containerProductDetail = (id) => {
     setShowCart(false);
     setShowProductDetail(true);
     items.map(item => {
@@ -71,10 +75,26 @@ function ShopiProvider({ children }) {
         setProduct(item)
       }
     })
+  }
 
-    // await fetch(`https://fakestoreapi.com/products/${id}`)
-    //   .then( async res => await res.json())
-    //   .then( async json => setProduct(json))
+  const eraseProduct = (id) => {
+    const product = cartItems.find(product => product.id === id)
+    setPay(pay - product.price);
+    const newCartErase = cartItems.filter(product => product.id !== id);
+    console.log(newCartErase)
+    setCartItems(newCartErase);
+  }
+
+  const createOrder = () => {
+    const newOrder = [...cartItems];
+    setOrder(newOrder);
+    setShowCart(false);
+    navigate("/my-order");
+  }
+  
+  // confirmacion para almacenado en ls
+  const confirmOrder = (product) => {
+    localStorage.setItem('eccomerce-v1', JSON.stringify(product))
   }
 
   return (
@@ -83,13 +103,14 @@ function ShopiProvider({ children }) {
         //productos 
         items, setItems, load,
         //carrito
-        cartCount, addToCart, shoppingCart, cartItems, setCartItems, pay, showCart, setShowCart,
+        cartCount, addToCart, shoppingCart, cartItems, setCartItems, eraseProduct, pay, showCart, setShowCart,
         //detalles de producto
-        showProductDetail, setShowProductDetail,
-        containerProductDetail, product,
+        showProductDetail, setShowProductDetail, containerProductDetail, product,
+        //ordenes
+        createOrder,
         //consultas a API
-        getElectronics, getClothes, getFornitures,
-        }}
+        getProducts,getElectronics, getClothes, getFornitures,
+      }}
     >
       {children}
     </ShopiStorage.Provider>

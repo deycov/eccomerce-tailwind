@@ -1,6 +1,6 @@
-const useFetchProducts = async (API_URL, API_LIMIT, setItems, setLoad) => {
+const useFetchProducts = async (API_URL, setItems, setLoad) => {
   try {
-    const response = await fetch(`${API_URL}${API_LIMIT}`);
+    const response = await fetch(`${API_URL}`);
     if (!response.ok)
       throw new Error(
         `## ERROOOR ## hubo un problema del tipo HTTP, ${response.status}`

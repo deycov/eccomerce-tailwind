@@ -30,12 +30,14 @@ const AppRoutes = () => {
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <ShopiProvider>
-        <AppRoutes />
-        <Navbar />
-      </ShopiProvider>
-    </BrowserRouter>
+    <div className="bg-white">  
+      <BrowserRouter>
+        <ShopiProvider>
+          <AppRoutes />
+          <Navbar />
+        </ShopiProvider>
+      </BrowserRouter>
+    </div>
   );
 };
 
