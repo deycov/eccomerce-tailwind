@@ -1,6 +1,7 @@
 import React, { createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {useFetchProducts, useFetchCategories, useFetchClothes} from "./useFetchApi";
+import { useGetStorage, useSetStorage } from "./useLocalStorage";
 
 const ShopiStorage = createContext();
 
@@ -8,49 +9,48 @@ function ShopiProvider({ children }) {
   const navigate = useNavigate();
   const API_URL = "https://fakestoreapi.com/products";
   const API_LIMIT = "?limit=9";
-  const API_JEWELERY = "/category/jewelery"; 
-  const API_ELECTRONICS = "/category/electronics"; 
-  const API_WOMENS = "/category/women's clothing"; 
-  const API_MENS = "/category/men's clothing";
+  // const API_JEWELERY = "/category/jewelery"; 
+  // const API_ELECTRONICS = "/category/electronics"; 
+  // const API_WOMENS = "/category/women's clothing"; 
+  // const API_MENS = "/category/men's clothing";
    
   //Estado de carga
   const [load, setLoad] = React.useState(false);
   
   // Estados de productos
   const [items, setItems] = React.useState([]);
+  const [categories, setCategories] = React.useState([]);
   
   // Estados del carrito 
   const [cartItems, setCartItems] = React.useState([]);
   const [showCart,setShowCart] = React.useState(false);
-  const [pay,setPay] = React.useState(0)
+  const [pay,setPay] = React.useState(0);
   let cartCount = cartItems.length;
   
-  // Estados de orden de pedido
-  const [order,setOrder] = React.useState(false);
+  //Estados de ordenes
+  const [orders, setOrders] = React.useState([]);
   
   //Estados de product detail
   const [showProductDetail,setShowProductDetail] = React.useState(false);
   const [product, setProduct] = React.useState({});
   
   //peticiones a la API
-  const getProducts = async () => {
+  React.useEffect(() => {
     setLoad(true);
-    useFetchProducts(API_URL, setItems, setLoad);
-  };
-  const getFornitures = async () => {
-    setLoad(true);
-    await useFetchCategories(setItems, API_URL, API_JEWELERY)
+    useFetchProducts(API_URL, setItems);
     setLoad(false);
-  }
-  const getElectronics = async () => {
-    setLoad(true);
-    await useFetchCategories(setItems, API_URL, API_ELECTRONICS)
-    setLoad(false);
-  }
-  const getClothes = async () => {
-    setLoad(true);
-    await useFetchClothes(setItems, API_URL, API_WOMENS, API_MENS)
-    setLoad(false);
+  },[]);  
+  
+  const changeCategorie = async (category) => {
+    const newCategory = [];
+    await items.map((item) => {
+      if(item.category === category) 
+        newCategory.push(item);
+
+      if(category === 'clothes' && (item.category === "men's clothing" || item.category === "women's clothing"))
+        newCategory.push(item);
+    })
+    setCategories(newCategory);
   }
 
   //funciones
@@ -86,30 +86,37 @@ function ShopiProvider({ children }) {
   }
 
   const createOrder = () => {
-    const newOrder = [...cartItems];
-    setOrder(newOrder);
     setShowCart(false);
     navigate("/my-order");
+
   }
   
   // confirmacion para almacenado en ls
-  const confirmOrder = (product) => {
-    localStorage.setItem('eccomerce-v1', JSON.stringify(product))
+  const confirmOrder = (order) => {
+    if (order != '' ){
+      const arr = [...orders, order];
+      useSetStorage(arr);
+      setCartItems([]);
+      navigate("/my-orders");
+    }
+  }
+
+  const getOrders =  async ()  => {
+    const storage = await useGetStorage();
+    setOrders(storage);
   }
 
   return (
-    <ShopiStorage.Provider
+    <ShopiStorage.Provider  
       value={{
         //productos 
-        items, setItems, load,
+        items, setItems, load, changeCategorie, categories,
         //carrito
         cartCount, addToCart, shoppingCart, cartItems, setCartItems, eraseProduct, pay, showCart, setShowCart,
         //detalles de producto
         showProductDetail, setShowProductDetail, containerProductDetail, product,
         //ordenes
-        createOrder,
-        //consultas a API
-        getProducts,getElectronics, getClothes, getFornitures,
+        createOrder, confirmOrder, getOrders, orders,
       }}
     >
       {children}

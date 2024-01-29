@@ -20,7 +20,7 @@ function Layout({ children }) {
         </ContainerDetail> 
       }
 
-      <div className='mt-20 flex flex-col px-10'>
+      <div className='mt-20 flex flex-col'>
         {children}
       </div>
     </>

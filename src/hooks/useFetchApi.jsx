@@ -1,4 +1,4 @@
-const useFetchProducts = async (API_URL, setItems, setLoad) => {
+const useFetchProducts = async (API_URL, setItems) => {
   try {
     const response = await fetch(`${API_URL}`);
     if (!response.ok)
@@ -7,12 +7,10 @@ const useFetchProducts = async (API_URL, setItems, setLoad) => {
       );
     const data = await response.json();
     setItems(data);
-    setLoad(false);
   } catch (err) {
     console.error(
       `## ERROOOR ## La pagina no pudo cargar los datos por -> ${err}`
     );
-    setLoad(false);
   }
 };
 
@@ -21,7 +19,7 @@ const useFetchCategories = async (setItems, API_URL, API_CATEGORY) => {
     const response = await fetch(`${API_URL}${API_CATEGORY}`);
     if (!response.ok)
       throw new Error(
-        `## ERROOOR ## hubo un problema del tipo HTTP, ${response.status}`
+        `## ERROOOR ## hubo un problema del tipo HTTP, ${response. status}`
       );
     const data = await response.json();
     setItems(data);

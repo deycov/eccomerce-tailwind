@@ -4,11 +4,7 @@ import { ShopiStorage } from "../../hooks/useContextShopi";
 import Layout from "../../components/Layout";
 import Card from "../../components/Card";
 function Home() {
-  const { items, getProducts, load } = useContext(ShopiStorage);
-
-  React.useEffect(()=>{
-    getProducts();
-  },[])
+  const { items, load } = useContext(ShopiStorage);
 
   return (
     <Layout>

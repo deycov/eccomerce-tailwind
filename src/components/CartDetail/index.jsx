@@ -4,7 +4,6 @@ import { ShopiStorage } from "../../hooks/useContextShopi"
 function CartDetail() {
   const {cartItems, setShowCart, eraseProduct, pay, createOrder} = useContext(ShopiStorage) 
 
-
   return (
     <>  
       <button className="absolute top-2 right-3 text-red-600 " onClick={() => setShowCart(false)}> X </button>
