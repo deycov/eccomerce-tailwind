@@ -11,14 +11,21 @@ function Nav() {
         <li className='font-semibold text-lg'>
           <NavLink
             to='/'
-            className={({ isActive }) => (isActive ? activeStyle : null)}
           >
             ShopI
           </NavLink>
         </li>
         <li>
           <NavLink
-            to='/electronics'
+            to='/'
+            className={({ isActive }) => (isActive ? activeStyle : null)}
+          >
+            All
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to='/:electronics'
             className={({ isActive }) => (isActive ? activeStyle : null)}
           >
             Electronics
@@ -26,7 +33,7 @@ function Nav() {
         </li>
         <li>
           <NavLink
-            to='/fornitures'
+            to='/:jewelery'
             className={({ isActive }) => (isActive ? activeStyle : null)}
           >
             Fornitures
@@ -34,7 +41,7 @@ function Nav() {
         </li>
         <li>
           <NavLink
-            to='/clothes'
+            to='/:clothes'
             className={({ isActive }) => (isActive ? activeStyle : null)}
           >
             Clothes

@@ -3,11 +3,24 @@ import ContainerDetail from "../ContainerDetail";
 import ProductDetail from "../ProductDetail";
 import CartDetail from "../CartDetail";
 import { ShopiStorage } from "../../hooks/useContextShopi";
+import { PortalError, PortalSuccess, PortalBuild } from "../Portals";
 
 function Layout({ children }) {
-  const {showCart, showProductDetail} = React.useContext(ShopiStorage)
+  const {showCart, showProductDetail, errorCondition, succesCondition, errorBuild } = React.useContext(ShopiStorage)
   return (
     <>
+      { errorBuild &&
+        <PortalBuild/>
+      }
+      
+      { succesCondition &&
+        <PortalSuccess/>
+      }
+
+      { errorCondition &&
+        <PortalError/>
+      }
+
       {showCart &&
         <ContainerDetail>    
           <CartDetail/>

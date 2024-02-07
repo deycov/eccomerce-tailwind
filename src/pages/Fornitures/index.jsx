@@ -4,10 +4,10 @@ import { ShopiStorage } from "../../hooks/useContextShopi";
 import Layout from "../../components/Layout";
 import Card from "../../components/Card";
 function Fornitures() {
-  const { load, changeCategorie, categories } = useContext(ShopiStorage);
+  const { load, items, changeCategorie, categories } = useContext(ShopiStorage);
 
   React.useEffect(()=>{
-    changeCategorie('jewelery');
+    changeCategorie(items,'jewelery');
   },[])
 
   return (

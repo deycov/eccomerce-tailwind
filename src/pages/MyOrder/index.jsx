@@ -3,10 +3,16 @@ import Layout from "../../components/Layout";
 import { ShopiStorage } from "../../hooks/useContextShopi";
 
 function MyOrder() {
-  const {load, createOrder, pay, cartItems, confirmOrder} = React.useContext(ShopiStorage) 
+  const {load, createOrder, pay, cartItems, confirmOrder, errorCondition, setErrorCondition } = React.useContext(ShopiStorage)
+  
+  React.useEffect(()=>{
+    if(cartItems.length === 0)
+      setErrorCondition(true);
+  },[cartItems])
+
   return (
     <Layout>
-      <div className="grid grid-cols-2 border-2 shadow-black drop-shadow-lg  rounded-lg m-auto mt-10 py-9 px-3 w-3/4 h-full">
+      <div className="grid grid-cols-2 border-2 shadow-black rounded-lg m-auto mt-10 py-9 px-3 w-3/4 h-full">
         <div className='text-center p-5 h-96 overflow-auto '>
         {cartItems == '' && <p className=" p-6 text-center"> Aun no ha seleccionado algun producto para comprar </p> }
         {cartItems != '' && <label className="font-bold"> Products </label> }
@@ -19,7 +25,7 @@ function MyOrder() {
             </div>
           ))}
         </div>
-        <div className="flex flex-col bg-white rounded-md" > 
+        <div className="flex flex-col bg-slate-100 rounded-md drop-shadow shadow-black" > 
           <div className="p-12 h-2/3 text-center">
           <label className="font-bold "> Total amount </label>
             <div className="w-full flex flex-row justify-between">
@@ -32,10 +38,10 @@ function MyOrder() {
             </div>
             <div className="w-full mt-9 flex flex-row justify-between">
               <label className="font-semibold size-28 text-lg"> Total </label>
-              <label className="text-red-600"> {pay}$ </label>
+              <label className="font-bold"> {pay}$ </label>
             </div>
           </div>
-          <button className="border-2 w-2/4 m-auto border-red-600 p-2 text-red-600 hover:bg-red-600 shadow-md hover:text-white rounded" 
+          <button className="border-2 w-2/4 m-auto border-emerald-600 p-2 text-emerald-600 bg-white hover:bg-emerald-600 shadow-md hover:text-white rounded" 
           onClick={() => confirmOrder(cartItems) }>
             Pay order 
           </button>

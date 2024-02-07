@@ -1,11 +1,12 @@
 import React, { createContext } from "react";
-import { useNavigate } from "react-router-dom";
-import {useFetchProducts, useFetchCategories, useFetchClothes} from "./useFetchApi";
+import { useNavigate, useParams } from "react-router-dom";
+import {useFetchProducts} from "./useFetchApi";
 import { useGetStorage, useSetStorage } from "./useLocalStorage";
 
 const ShopiStorage = createContext();
 
 function ShopiProvider({ children }) {
+  const currentPath = window.location.pathname;
   const navigate = useNavigate();
   const API_URL = "https://fakestoreapi.com/products";
   const API_LIMIT = "?limit=9";
@@ -16,10 +17,14 @@ function ShopiProvider({ children }) {
    
   //Estado de carga
   const [load, setLoad] = React.useState(false);
+  const [succesCondition, setSuccesCondition] = React.useState(false)
+  const [errorCondition, setErrorCondition] = React.useState(false)
+  const [errorBuild, setErrorBuild] = React.useState(false)
   
   // Estados de productos
   const [items, setItems] = React.useState([]);
-  const [categories, setCategories] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState("");
+  const [filteredItems, setFilteredItems] = React.useState("");
   
   // Estados del carrito 
   const [cartItems, setCartItems] = React.useState([]);
@@ -39,21 +44,24 @@ function ShopiProvider({ children }) {
     setLoad(true);
     useFetchProducts(API_URL, setItems);
     setLoad(false);
+    console.log(currentPath)
   },[]);  
-  
-  const changeCategorie = async (category) => {
-    const newCategory = [];
-    await items.map((item) => {
-      if(item.category === category) 
-        newCategory.push(item);
 
-      if(category === 'clothes' && (item.category === "men's clothing" || item.category === "women's clothing"))
-        newCategory.push(item);
-    })
-    setCategories(newCategory);
-  }
 
   //funciones
+  const filtered = (item, searchedItem) => {
+    return item.filter(
+      (item) =>
+        item.category.toLowerCase().includes(searchedItem.toLowerCase())
+    );
+  };
+
+  const searched = items.filter((item)=>{
+    const itemText = item.title.toLowerCase();
+    const searchItem = searchValue.toLowerCase();
+    return itemText.includes(searchItem);
+  });
+
   const addToCart = ( id, title, price, image) => {
     if(!cartItems.some(item => item.id === id)){
       const newProduct = { id, title, price, image };
@@ -69,7 +77,7 @@ function ShopiProvider({ children }) {
 
   const containerProductDetail = (id) => {
     setShowCart(false);
-    setShowProductDetail(true);
+    setShowProductDetail(true); 
     items.map(item => {
       if (item.id === id){
         setProduct(item)
@@ -96,8 +104,7 @@ function ShopiProvider({ children }) {
     if (order != '' ){
       const arr = [...orders, order];
       useSetStorage(arr);
-      setCartItems([]);
-      navigate("/my-orders");
+      setSuccesCondition(true);
     }
   }
 
@@ -110,11 +117,13 @@ function ShopiProvider({ children }) {
     <ShopiStorage.Provider  
       value={{
         //productos 
-        items, setItems, load, changeCategorie, categories,
+        items, setItems, searchValue, setSearchValue, load, setLoad, API_URL,
         //carrito
-        cartCount, addToCart, shoppingCart, cartItems, setCartItems, eraseProduct, pay, showCart, setShowCart,
+        cartCount, addToCart, shoppingCart, searched, cartItems, setCartItems, eraseProduct, setPay, pay, showCart, setShowCart,
         //detalles de producto
         showProductDetail, setShowProductDetail, containerProductDetail, product,
+        // Condiciones validadoras
+        errorCondition, setErrorCondition, succesCondition, setSuccesCondition, errorBuild, setErrorBuild,
         //ordenes
         createOrder, confirmOrder, getOrders, orders,
       }}
