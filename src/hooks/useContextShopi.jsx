@@ -7,6 +7,7 @@ const ShopiStorage = createContext();
 
 function ShopiProvider({ children }) {
   const currentPath = window.location.pathname;
+  let index = currentPath.substring(currentPath.lastIndexOf('/')+1)
   const navigate = useNavigate();
   const API_URL = "https://fakestoreapi.com/products";
   const API_LIMIT = "?limit=9";
@@ -44,22 +45,25 @@ function ShopiProvider({ children }) {
     setLoad(true);
     useFetchProducts(API_URL, setItems);
     setLoad(false);
-    console.log(currentPath)
+    console.log(index);
   },[]);  
+
+  React.useEffect(() => 
+    setFilteredItems(index), 
+  [index]);
 
 
   //funciones
-  const filtered = (item, searchedItem) => {
-    return item.filter(
-      (item) =>
-        item.category.toLowerCase().includes(searchedItem.toLowerCase())
-    );
-  };
-
   const searched = items.filter((item)=>{
     const itemText = item.title.toLowerCase();
     const searchItem = searchValue.toLowerCase();
+    if ( filteredItems !== '' && item.category === filteredItems)
+      return itemText.includes(searchItem);
+    if ( filteredItems !== '' && item.category === 'clothes')
+      return itemText.includes(searchItem);
+    if (filteredItems === '')
     return itemText.includes(searchItem);
+
   });
 
   const addToCart = ( id, title, price, image) => {
