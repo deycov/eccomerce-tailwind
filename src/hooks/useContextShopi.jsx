@@ -59,7 +59,7 @@ function ShopiProvider({ children }) {
     const searchItem = searchValue.toLowerCase();
     if ( filteredItems !== '' && item.category === filteredItems)
       return itemText.includes(searchItem);
-    if ( filteredItems !== '' && item.category === 'clothes')
+    if ( filteredItems === 'clothes' && (item.category === "men's clothing" || item.category === "women's clothing"))
       return itemText.includes(searchItem);
     if (filteredItems === '')
     return itemText.includes(searchItem);
