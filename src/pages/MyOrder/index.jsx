@@ -3,11 +3,11 @@ import Layout from "../../components/Layout";
 import { ShopiStorage } from "../../hooks/useContextShopi";
 
 function MyOrder() {
-  const {load, createOrder, pay, cartItems, confirmOrder, errorCondition, setErrorCondition } = React.useContext(ShopiStorage)
+  const {eraseProduct, pay, cartItems, confirmOrder, setErrorCondition } = React.useContext(ShopiStorage)
   
   React.useEffect(()=>{
     if(cartItems.length === 0)
-      setErrorCondition(true);
+      setErrorCondition(1);
   },[cartItems])
 
   return (

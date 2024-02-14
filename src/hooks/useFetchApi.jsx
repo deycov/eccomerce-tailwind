@@ -1,4 +1,5 @@
-const useFetchProducts = async (API_URL, setItems) => {
+const useFetchProducts = async (API_URL, setItems, setLoad) => {
+  setLoad(true)
   try {
     const response = await fetch(`${API_URL}`);
     if (!response.ok)
@@ -7,10 +8,12 @@ const useFetchProducts = async (API_URL, setItems) => {
       );
     const data = await response.json();
     setItems(data);
+    setLoad(false)
   } catch (err) {
     console.error(
       `## ERROOOR ## La pagina no pudo cargar los datos por -> ${err}`
     );
+    setLoad(false)
   }
 };
 

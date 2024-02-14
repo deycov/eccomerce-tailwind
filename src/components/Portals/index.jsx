@@ -30,6 +30,34 @@ function PortalError () {
   )
 }
 
+function PortalErrorOrders () {
+  const { setErrorCondition } = React.useContext(ShopiStorage)
+  const containerError = document.getElementById("error");
+  return(
+    <>
+      {createPortal(
+        <div className="fixed top-0 z-30 w-full h-full backdrop-blur">
+          <div className=" h-full w-full m-auto flex flex-col justify-center items-center rounded">
+            <h3 className="bg-red-200 w-2/5 rounded-lg text-center py-10 px-5 mb-10">
+              <p className="font-bold text-lg">Espera!🖐️⚠️</p>
+              <p>Aun no has concretado una compra 😥🛒</p>
+              <p>📃 Debes realizar al menos una para ver el listado de tus ordenes 📃</p>
+              <NavLink
+                to='/'
+              >
+                <p 
+                  onClick={() => setErrorCondition(false)}
+                  className="text-red-700 text-lg py-3 hover:underline	">Ir a Home
+                </p>
+              </NavLink>
+            </h3>
+          </div>
+        </div>
+      , containerError)}
+    </>
+  )
+}
+
 function PortalBuild () {
   const { setErrorBuild } = React.useContext(ShopiStorage)
   const containerError = document.getElementById("error");
@@ -90,4 +118,4 @@ function PortalSuccess () {
   )
 }
 
-export {PortalError, PortalSuccess, PortalBuild};
+export {PortalError, PortalErrorOrders, PortalSuccess, PortalBuild};

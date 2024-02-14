@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      height: {
+        '128': '32rem',
+      },
       keyframes: {
         rotate: {
           '0%': { transform: 'rotate(0deg)' },

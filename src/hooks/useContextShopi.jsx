@@ -27,7 +27,8 @@ function ShopiProvider({ children }) {
   const [searchValue, setSearchValue] = React.useState("");
   const [filteredItems, setFilteredItems] = React.useState("");
   
-  // Estados del carrito 
+  // Estados del carrito
+  const [stateId, setStateId] = React.useState(false);
   const [cartItems, setCartItems] = React.useState([]);
   const [showCart,setShowCart] = React.useState(false);
   const [pay,setPay] = React.useState(0);
@@ -35,6 +36,8 @@ function ShopiProvider({ children }) {
   
   //Estados de ordenes
   const [orders, setOrders] = React.useState([]);
+  const [billItems, setBillItems] = React.useState([])
+  const [showBill,setShowBill] = React.useState(false);
   
   //Estados de product detail
   const [showProductDetail,setShowProductDetail] = React.useState(false);
@@ -42,10 +45,8 @@ function ShopiProvider({ children }) {
   
   //peticiones a la API
   React.useEffect(() => {
-    setLoad(true);
-    useFetchProducts(API_URL, setItems);
-    setLoad(false);
-    console.log(index);
+    useFetchProducts(API_URL, setItems, setLoad);
+    getOrders();
   },[]);  
 
   React.useEffect(() => 
@@ -63,13 +64,20 @@ function ShopiProvider({ children }) {
       return itemText.includes(searchItem);
     if (filteredItems === '')
     return itemText.includes(searchItem);
-
   });
+
+  const roundAmount = (amount, decimals) => {
+    var factor = Math.pow(10, decimals);
+    return Math.round(amount * factor) / factor;
+  }
 
   const addToCart = ( id, title, price, image) => {
     if(!cartItems.some(item => item.id === id)){
+      setPay(state => {  
+        let amount = state + price;
+        return roundAmount(amount, 2);
+      });
       const newProduct = { id, title, price, image };
-      setPay(state => state + price);
       setCartItems(product => [...product, newProduct]);
     }
   };
@@ -91,30 +99,52 @@ function ShopiProvider({ children }) {
 
   const eraseProduct = (id) => {
     const product = cartItems.find(product => product.id === id)
-    setPay(pay - product.price);
+    setPay(state => {  
+      let amount = state - product.price;
+      return roundAmount(amount, 2);
+    });
     const newCartErase = cartItems.filter(product => product.id !== id);
-    console.log(newCartErase)
     setCartItems(newCartErase);
   }
 
   const createOrder = () => {
     setShowCart(false);
     navigate("/my-order");
-
   }
   
   // confirmacion para almacenado en ls
   const confirmOrder = (order) => {
     if (order != '' ){
-      const arr = [...orders, order];
-      useSetStorage(arr);
+      getOrders(true);
+      const date = new Date();
+      let actually = [date.getDate(),date.getMonth(),date.getFullYear()];
+      const newOrder = {
+        id: stateId,
+        payment: pay,
+        date: actually,
+        order
+      }
+      const storage = [newOrder, ...orders];
+      useSetStorage(storage);
       setSuccesCondition(true);
     }
   }
 
-  const getOrders =  async ()  => {
+  const getOrders =  async () => {
     const storage = await useGetStorage();
+    let initialValue = []
+    if(!storage){
+      setOrders(initialValue);
+      setStateId(1);
+      setErrorCondition(2);
+    }
     setOrders(storage);
+    setStateId(storage.length + 1)
+  }
+
+  const getBill = async (id) => {
+    const bill = await orders.find((item) => item.id === id)
+    return bill;
   }
 
   return (
@@ -129,7 +159,7 @@ function ShopiProvider({ children }) {
         // Condiciones validadoras
         errorCondition, setErrorCondition, succesCondition, setSuccesCondition, errorBuild, setErrorBuild,
         //ordenes
-        createOrder, confirmOrder, getOrders, orders,
+        createOrder, confirmOrder, getOrders, orders, getBill, billItems, setBillItems, showBill,setShowBill
       }}
     >
       {children}

@@ -1,9 +1,10 @@
 function ContainerDetail({children}){
   return(
-    <div className="fixed top-20 right-2 border-2 bg-white border-black h-5/6 w-80 rounded py-5 z-20 overflow-auto">
+    <div className="fixed top-16 right-2 border-2 bg-white w-96 h-3/5 z-20 drop-shadow rounded shadow-black ">
       {children}
     </div>
   )    
 }
 
 export default ContainerDetail;
+
