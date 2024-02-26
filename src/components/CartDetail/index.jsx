@@ -1,12 +1,15 @@
-import React, { useContext } from "react"
-import { ShopiStorage } from "../../hooks/useContextShopi"
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import {TrashIcon} from "@heroicons/react/24/outline";
+
+import React, { useContext } from "react";
+import { ShopiStorage } from "../../hooks/useContextShopi";
 
 function CartDetail() {
   const {cartItems, setShowCart, eraseProduct, pay, createOrder} = useContext(ShopiStorage) 
 
   return (
     <div className="h-full overflow-auto">  
-      <button className="absolute top-2 right-3 text-red-600 " onClick={() => setShowCart(false)}> X </button>
+      <XMarkIcon className="absolute top-0 right-0 text-red-600 w-7 cursor-pointer bg-white rounded-lg " onClick={() => setShowCart(false)}/> 
       {cartItems == '' && <p className=" p-6 text-center"> Aun no ha seleccionado algun producto para comprar </p> }
       <div className="mb-12">
 
@@ -14,9 +17,11 @@ function CartDetail() {
           <div key={product.id} className="flex flex-row justify-between items-center p-4 hover:bg-slate-100">
               <img src={product.image} className="w-16 h-20"/>  
               <h3 className="px-7 text-center"> {product.title} </h3>
-              <p className="text-emerald-600"> {product.price} </p>
-              <button className="text-red-600 mb-20" 
-              onClick={()=> eraseProduct(product.id)}> x </button>
+              <div className="flex flex-col items-end">
+                <p className="text-emerald-600"> {product.price} </p>
+                <TrashIcon className="text-red-600 w-4 cursor-pointer" 
+                onClick={()=> eraseProduct(product.id)}/> 
+              </div>
           </div>
         ))}
       </div>

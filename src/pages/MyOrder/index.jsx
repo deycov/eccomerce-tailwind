@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import Layout from "../../components/Layout";
 import { ShopiStorage } from "../../hooks/useContextShopi";
@@ -21,7 +22,8 @@ function MyOrder() {
             <div key={item.id} className="flex flex-row justify-between items-center p-4 rounded-sm hover:bg-slate-100">              
               <img src={item.image} className="w-16 h-20"/>  
               <h3 className="px-7 snap-center text-center"> {item.title} </h3>
-              <button className=" text-red-600 " onClick={()=> eraseProduct(item.id)}> x </button>
+              <TrashIcon className="text-red-600 w-4 cursor-pointer" 
+                onClick={()=> eraseProduct(item.id)}/>
             </div>
           ))}
         </div>

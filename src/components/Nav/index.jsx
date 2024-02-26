@@ -1,5 +1,8 @@
-import React, { useContext } from "react";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline"; 
 import { NavLink } from "react-router-dom";
+
+import React, { useContext } from "react";
+
 import { ShopiStorage } from "../../hooks/useContextShopi";
 
 function Nav() {
@@ -49,8 +52,8 @@ function Nav() {
         </li>
       </ul>
 
-      <ul className='flex items-center gap-3'>
-        <li className='opacity-75'> web.deyco@mail.com</li>
+      <ul className='flex items-center gap-3 '>
+        <li className='opacity-75 sm:hidden'> web.deyco@mail.com</li>
         <li>
           <NavLink
             to='/my-account'
@@ -83,12 +86,16 @@ function Nav() {
             Sign In
           </NavLink>
         </li>
-        <li className='font-semibold text-md hover:cursor-pointer' onClick={shoppingCart}>
-          🛒 {cartCount}
+        <li className='font-semibold text-md w-9 hover:cursor-pointer' onClick={shoppingCart}>
+          <div className="flex flex-row items-center justify-between rounded-lg p-1 hover:bg-slate-100">
+            <ShoppingCartIcon/>
+            {cartCount}
+          </div>
         </li>
       </ul>
     </nav>
   );
 }
+
 
 export default Nav;

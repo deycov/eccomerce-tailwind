@@ -1,4 +1,7 @@
+import {PlusCircleIcon} from '@heroicons/react/24/outline';
+
 import React, { useContext } from "react";
+
 import { ShopiStorage } from "../../hooks/useContextShopi";
 
 function Card({ id, title, price, image, category}) {
@@ -22,19 +25,19 @@ function Card({ id, title, price, image, category}) {
               onClick={ () =>
                 containerProductDetail(id)
               }
-            />
-            <button
+              />
+            <PlusCircleIcon
               className={`absolute flex justify-center items-center w-8 h-8 font-semibold text-xl rounded-full top-0 right-0 shadow-sm ${ select ? "text-lime-600" : "hover:animate-rotate"} `}
               onClick={() => {
                 addToCart(id, title, price, image);
                 setSelect(true);
               }}
-            >
-              +
-            </button>
+            /> 
+
           </figure>
 
           <div className='flex overflow-hidden w-full h-20 justify-between pb-2'>
+
             <span className='font-thin text-sm'>{title}</span>
             <span className='font-medium text-emerald-600'>{price}$</span>
           </div>

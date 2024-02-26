@@ -1,3 +1,5 @@
+import { XMarkIcon } from "@heroicons/react/24/outline";
+
 import React from "react"
 import { ShopiStorage } from '../../hooks/useContextShopi'
 
@@ -6,7 +8,7 @@ function ProductDetail() {
   
   return(
     <div className="flex flex-col p-3 h-full overflow-auto">
-      <button className="absolute right-3 text-red-600 " onClick={() => setShowProductDetail(false) }> X </button>
+      <XMarkIcon className="absolute top-0 right-0 text-red-600 w-7 cursor-pointer bg-white rounded-lg " onClick={() => setShowProductDetail(false) }/>
       <img src={product.image} alt="img product" 
       className="w-full h-40 object-contain"/>
       <label className="text-center font-semibold text-sm text-slate-800"> {product.title} </label>
